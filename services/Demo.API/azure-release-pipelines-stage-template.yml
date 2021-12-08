@@ -7,6 +7,8 @@ parameters:
   default: ''
 - name: apiAppName
   default: ''
+- name: apiAppApimName
+  default: 'rutzsco-demo-webapp-api-auth-api-ci'
 - name: organizationName
   default: 'scrutz'
 - name: adminEmail
@@ -44,7 +46,7 @@ stages:
                 resourceGroupName: ${{ parameters.resourceGroupName }}
                 location: ${{ parameters.region }}
                 csmFile: '$(Pipeline.Workspace)/build/Infrastructure/api-management-consumption.json'
-                overrideParameters: '-apimName ${{ parameters.apiAppName }} -organizationName ${{ parameters.organizationName }} -adminEmail ${{ parameters.adminEmail }}'
+                overrideParameters: '-apimName ${{ parameters.apiAppApimName }}2 -organizationName ${{ parameters.organizationName }} -adminEmail ${{ parameters.adminEmail }}'
                 deploymentOutputs: ResourceGroupDeploymentOutputs
 
             - task: AzureResourceGroupDeployment@2
