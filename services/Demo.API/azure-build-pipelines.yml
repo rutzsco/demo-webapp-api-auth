@@ -4,14 +4,14 @@ trigger:
     - main
   paths:
     include:
-    - Services/Demo.API/*
+    - services/Demo.API/*
 
 pool:
   vmImage: 'ubuntu-latest'
 
 variables:
   buildConfiguration: 'Release'
-  rootDirectory: 'Services/Demo.API'
+  rootDirectory: 'services/Demo.API'
 
 steps:
 - task: DotNetCoreCLI@2
