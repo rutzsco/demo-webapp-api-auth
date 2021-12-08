@@ -1,0 +1,20 @@
+trigger: none
+
+resources:
+  pipelines:
+  - pipeline: build
+    source: 'Demo API - Build'
+  
+variables:
+  azureSubscription: 'TBD'
+
+stages:
+- template: azure-release-pipelines-stage-template.yml
+  parameters:
+    stageName: 'CI'
+    environment: 'CI'
+    azureSubscription: ${{ variables.azureSubscription }}
+    webAppName: 'demo-webapp-api-auth-ci'
+    resourceGroupName: 'demo-webapp-api-auth-api-ci'
+    region: 'East US'
+    packageName: 'Demo.API.zip'
