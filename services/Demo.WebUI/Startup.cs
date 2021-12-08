@@ -31,13 +31,13 @@ namespace Demo.WebUI
             //services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
             //    .AddAzureAD(options => Configuration.Bind("AzureAd", options));
 
-            services.AddControllersWithViews(options =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-            });
+            //services.AddControllersWithViews(options =>
+            //{
+            //    var policy = new AuthorizationPolicyBuilder()
+            //        .RequireAuthenticatedUser()
+            //        .Build();
+            //    options.Filters.Add(new AuthorizeFilter(policy));
+            //});
             services.AddRazorPages();
         }
 

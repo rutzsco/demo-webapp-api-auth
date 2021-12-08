@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Demo.WebUI.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -32,7 +32,7 @@ namespace Demo.WebUI.Controllers
             return View();
         }
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
