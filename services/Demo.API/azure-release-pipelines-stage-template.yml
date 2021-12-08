@@ -5,8 +5,12 @@ parameters:
   default: ''
 - name: azureSubscription
   default: ''
-- name: webAppName
+- name: apiAppName
   default: ''
+- name: organizationName
+  default: 'scrutz'
+- name: adminEmail
+  default: 'scrutz@microsoft.com'
 - name: resourceGroupName
   default: ''
 - name: storageAccountName
@@ -34,7 +38,17 @@ stages:
   
             steps:
             - task: AzureResourceGroupDeployment@2
-              displayName: '1. Create App Service'
+              displayName: '1. Create APIM'
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                resourceGroupName: ${{ parameters.resourceGroupName }}
+                location: ${{ parameters.region }}
+                csmFile: '$(Pipeline.Workspace)/build/Infrastructure/api-management-consumptions.json'
+                overrideParameters: '-apimName ${{ parameters.apiAppName }} -organizationName ${{ parameters.organizationName }} -adminEmail ${{ parameters.adminEmail }}'
+                deploymentOutputs: ResourceGroupDeploymentOutputs
+
+            - task: AzureResourceGroupDeployment@2
+              displayName: '2. Create App Service'
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
                 resourceGroupName: ${{ parameters.resourceGroupName }}
@@ -44,7 +58,7 @@ stages:
                 deploymentOutputs: ResourceGroupDeploymentOutputs
 
             - task: AzureRmWebAppDeployment@4
-              displayName: '3. Azure App Service Deploy:'
+              displayName: '3. Application Deployment'
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
                 WebAppName: ${{ parameters.webAppName }}
