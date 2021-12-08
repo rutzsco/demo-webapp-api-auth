@@ -54,13 +54,13 @@ stages:
                 resourceGroupName: ${{ parameters.resourceGroupName }}
                 location: ${{ parameters.region }}
                 csmFile: '$(Pipeline.Workspace)/build/Infrastructure/appservice-web-app.json'
-                overrideParameters: '-appName ${{ parameters.webAppName }}'
+                overrideParameters: '-appName ${{ parameters.apiAppName }}'
                 deploymentOutputs: ResourceGroupDeploymentOutputs
 
             - task: AzureRmWebAppDeployment@4
               displayName: '3. Application Deployment'
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
-                WebAppName: ${{ parameters.webAppName }}
+                WebAppName: ${{ parameters.apiAppName }}
                 package: '$(Pipeline.Workspace)/build/App/${{ parameters.packageName }}'
                 AppSettings: ''
