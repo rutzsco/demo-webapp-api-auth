@@ -14,7 +14,7 @@ stages:
     stageName: 'CI'
     environment: 'CI'
     azureSubscription: ${{ variables.azureSubscription }}
-    webAppName: 'demo-webapp-api-auth-ci'
+    apiAppName: 'demo-webapp-api-auth-ci'
     resourceGroupName: 'demo-webapp-api-auth-api-ci'
     region: 'East US'
     packageName: 'Demo.API.zip'
