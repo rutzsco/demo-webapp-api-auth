@@ -3,10 +3,10 @@ trigger: none
 resources:
   pipelines:
   - pipeline: build
-    source: 'Demo API - Build'
+    source: 'demo-webapp-api-auth - API - BUILD'
   
 variables:
-  azureSubscription: 'TBD'
+  azureSubscription: 'Demo Acount'
 
 stages:
 - template: azure-release-pipelines-stage-template.yml
