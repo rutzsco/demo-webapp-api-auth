@@ -43,7 +43,7 @@ stages:
                 azureSubscription: ${{ parameters.azureSubscription }}
                 resourceGroupName: ${{ parameters.resourceGroupName }}
                 location: ${{ parameters.region }}
-                csmFile: '$(Pipeline.Workspace)/build/Infrastructure/api-management-consumptions.json'
+                csmFile: '$(Pipeline.Workspace)/build/Infrastructure/api-management-consumption.json'
                 overrideParameters: '-apimName ${{ parameters.apiAppName }} -organizationName ${{ parameters.organizationName }} -adminEmail ${{ parameters.adminEmail }}'
                 deploymentOutputs: ResourceGroupDeploymentOutputs
 
