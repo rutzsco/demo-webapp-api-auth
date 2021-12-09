@@ -6,7 +6,7 @@ resources:
     source: 'demo-webapp-api-auth - UI - BUILD'
   
 variables:
-  azureSubscription: 'Demo Account'
+  azureSubscription: 'Demo Account Rutzscodev'
 
 stages:
 - template: azure-release-pipelines-stage-template.yml
@@ -14,7 +14,7 @@ stages:
     stageName: 'CI'
     environment: 'CI'
     azureSubscription: ${{ variables.azureSubscription }}
-    webAppName: 'demo-webapp-api-auth-ui-ci'
-    resourceGroupName: 'demo-webapp-api-auth-ui-ci'
+    webAppName: 'rutzscodev-demo-webapp-api-auth-ui-ci'
+    resourceGroupName: 'rutzscodev-demo-webapp-api-auth-ui-ci'
     region: 'East US'
     packageName: 'Demo.WebUI.zip'
