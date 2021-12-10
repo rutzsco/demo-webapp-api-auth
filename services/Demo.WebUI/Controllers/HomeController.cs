@@ -1,4 +1,7 @@
-﻿using Demo.WebUI.Models;
+﻿using Azure.Core;
+using Azure.Identity;
+
+using Demo.WebUI.Models;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +32,10 @@ namespace Demo.WebUI.Controllers
 
         public IActionResult Privacy()
         {
-            return View();
+            var tokenCredential = new DefaultAzureCredential(includeInteractiveCredentials: true);
+            var accessToken = tokenCredential.GetToken(new TokenRequestContext(scopes: new string[] { "api://f85c6bd9-11e3-45b2-8e49-f719766bb99e" + "/.default" }) { });
+            
+            return View(new PrivacyViewModel() { AccessToken = accessToken.Token});
         }
 
         //[AllowAnonymous]
