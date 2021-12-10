@@ -27,7 +27,9 @@ namespace Demo.WebUI.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            HttpClient.BaseAddress = new Uri("https://rutzscodev-demo-webapp-api-auth-api-ci.azurewebsites.net/");
+            //HttpClient.BaseAddress = new Uri("https://rutzscodev-demo-webapp-api-auth-api-ci.azurewebsites.net/");
+            HttpClient.BaseAddress = new Uri("https://rutzsco-demo-webapp-api-auth-api-ci2.azure-api.net/");
+       
         }
 
         public IActionResult Index()
