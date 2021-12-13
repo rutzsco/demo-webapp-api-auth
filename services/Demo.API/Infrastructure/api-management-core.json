@@ -52,22 +52,7 @@
       "metadata": {
         "description": "Location for all resources."
       }
-    },
-    "AADRegistrationName": {
-			"type": "string"
-		},
-    "AADClientId": {
-			"type": "string"
-		},
-    "AADClientSecret": {
-			"type": "string"
-		},
-    "AADAuthorizationEndpoint": {
-			"type": "string"
-		},
-    "AADTokenEndpoint": {
-			"type": "string"
-		}
+    }
   },
   "resources": [
     {
@@ -100,32 +85,6 @@
 				}
 			}
 		]
-    },
-    {
-      "type": "Microsoft.ApiManagement/service/authorizationServers",
-      "apiVersion": "2019-12-01",
-      "name": "[concat(parameters('serviceName'), '/', parameters('AADRegistrationName'))]",
-      "dependsOn": [
-          "[resourceId('Microsoft.ApiManagement/service', parameters('serviceName'))]"
-      ],
-      "properties": {
-          "displayName": "[parameters('AADRegistrationName')]",
-          "clientRegistrationEndpoint": "http://localhost",
-          "authorizationEndpoint": "[parameters('AADAuthorizationEndpoint')]",
-          "authorizationMethods": [
-              "GET"
-          ],
-          "clientAuthenticationMethod": [
-              "Body"
-          ],
-          "tokenEndpoint": "[parameters('AADTokenEndpoint')]",
-          "grantTypes": [
-              "authorizationCode"
-          ],
-          "clientId": "[parameters('AADClientId')]",
-          "clientSecret" : "[parameters('AADClientSecret')]",
-          "bearerTokenSendingMethods" : [ "authorizationHeader" ]
-      }
     }
   ]
 }
