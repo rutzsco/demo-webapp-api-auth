@@ -56,7 +56,7 @@ stages:
                 resourceGroupName: ${{ parameters.resourceGroupName }}
                 location: ${{ parameters.region }}
                 csmFile: '$(Pipeline.Workspace)/build/Infrastructure/api-management-core.json'
-                overrideParameters: '-apimName ${{ parameters.apiAppApimName }}3 -organizationName ${{ parameters.organizationName }} -adminEmail ${{ parameters.adminEmail }}'
+                overrideParameters: '-serviceName ${{ parameters.apiAppApimName }}3 -publisherName ${{ parameters.organizationName }} -publisherEmail ${{ parameters.adminEmail }}'
                 deploymentOutputs: ResourceGroupDeploymentOutputs
 
             - task: AzureResourceGroupDeployment@2
