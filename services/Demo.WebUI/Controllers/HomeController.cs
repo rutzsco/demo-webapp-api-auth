@@ -28,17 +28,9 @@ namespace Demo.WebUI.Controllers
         {
             _logger = logger;
             _clientFactory = clientFactory;
-
-            //HttpClient.BaseAddress = new Uri("https://rutzscodev-demo-webapp-api-auth-api-ci.azurewebsites.net/");
-            //HttpClient.BaseAddress = new Uri("https://rutzsco-demo-webapp-api-auth-api-ci2.azure-api.net/");
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public async Task<ActionResult> Privacy()
+        public async Task<ActionResult> Index()
         {
             var tokenCredential = new DefaultAzureCredential();
             var accessToken = tokenCredential.GetToken(new TokenRequestContext(scopes: new string[] { "api://f85c6bd9-11e3-45b2-8e49-f719766bb99e" + "/.default" }) { });
@@ -54,7 +46,7 @@ namespace Demo.WebUI.Controllers
                 weatherForecast = JsonSerializer.Deserialize<List<WeatherForecast>>(content);
             }
 
-            return View(new PrivacyViewModel() { AccessToken = accessToken.Token, WeatherForecast = weatherForecast });
+            return View(new HomeViewModel(this.HttpContext.User.Claims, accessToken.Token, weatherForecast));
         }
 
         //[AllowAnonymous]
