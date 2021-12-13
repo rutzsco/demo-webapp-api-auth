@@ -22,14 +22,15 @@ namespace Demo.WebUI.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private static HttpClient HttpClient = new HttpClient();
+        private readonly IHttpClientFactory _clientFactory;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IHttpClientFactory clientFactory, ILogger<HomeController> logger)
         {
             _logger = logger;
+            _clientFactory = clientFactory;
+
             //HttpClient.BaseAddress = new Uri("https://rutzscodev-demo-webapp-api-auth-api-ci.azurewebsites.net/");
-            HttpClient.BaseAddress = new Uri("https://rutzsco-demo-webapp-api-auth-api-ci2.azure-api.net/");
-       
+            //HttpClient.BaseAddress = new Uri("https://rutzsco-demo-webapp-api-auth-api-ci2.azure-api.net/");
         }
 
         public IActionResult Index()
@@ -43,9 +44,10 @@ namespace Demo.WebUI.Controllers
             var accessToken = tokenCredential.GetToken(new TokenRequestContext(scopes: new string[] { "api://f85c6bd9-11e3-45b2-8e49-f719766bb99e" + "/.default" }) { });
             List<WeatherForecast> weatherForecast = null;
 
-            
-            HttpClient.DefaultRequestHeaders.Authorization =new AuthenticationHeaderValue("Bearer", accessToken.Token);
-            HttpResponseMessage response = await HttpClient.GetAsync("WeatherForecast");
+            var client = _clientFactory.CreateClient();
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Token);
+            HttpResponseMessage response = await client.GetAsync("https://rutzsco-demo-webapp-api-auth-api-ci2.azure-api.net/WeatherForecast");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();

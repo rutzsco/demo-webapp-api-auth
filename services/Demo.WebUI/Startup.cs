@@ -38,6 +38,7 @@ namespace Demo.WebUI
             //        .Build();
             //    options.Filters.Add(new AuthorizeFilter(policy));
             //});
+            services.AddHttpClient();
             services.AddRazorPages();
         }
 
