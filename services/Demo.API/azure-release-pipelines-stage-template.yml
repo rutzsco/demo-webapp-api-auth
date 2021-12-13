@@ -40,12 +40,22 @@ stages:
   
             steps:
             - task: AzureResourceGroupDeployment@2
-              displayName: '1. Create APIM'
+              displayName: '1. Create APIM Consumption'
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
                 resourceGroupName: ${{ parameters.resourceGroupName }}
                 location: ${{ parameters.region }}
                 csmFile: '$(Pipeline.Workspace)/build/Infrastructure/api-management-consumption.json'
+                overrideParameters: '-apimName ${{ parameters.apiAppApimName }}2 -organizationName ${{ parameters.organizationName }} -adminEmail ${{ parameters.adminEmail }}'
+                deploymentOutputs: ResourceGroupDeploymentOutputs
+
+            - task: AzureResourceGroupDeployment@2
+              displayName: '1. Create APIM Dev'
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                resourceGroupName: ${{ parameters.resourceGroupName }}
+                location: ${{ parameters.region }}
+                csmFile: '$(Pipeline.Workspace)/build/Infrastructure/api-management-core.json'
                 overrideParameters: '-apimName ${{ parameters.apiAppApimName }}2 -organizationName ${{ parameters.organizationName }} -adminEmail ${{ parameters.adminEmail }}'
                 deploymentOutputs: ResourceGroupDeploymentOutputs
 
