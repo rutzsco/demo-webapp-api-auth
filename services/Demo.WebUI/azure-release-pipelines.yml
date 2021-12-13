@@ -18,3 +18,12 @@ stages:
     resourceGroupName: 'rutzscodev-demo-webapp-api-auth-ui-ci'
     region: 'East US'
     packageName: 'Demo.WebUI.zip'
+- template: azure-release-pipelines-stage-template.yml
+  parameters:
+    stageName: 'CI'
+    environment: 'CI'
+    azureSubscription: ${{ variables.azureSubscription }}
+    webAppName: 'rutzscodev-demo-webapp-api-auth-ui2-ci'
+    resourceGroupName: 'rutzscodev-demo-webapp-api-auth-ui2-ci'
+    region: 'East US'
+    packageName: 'Demo.WebUI.zip'
