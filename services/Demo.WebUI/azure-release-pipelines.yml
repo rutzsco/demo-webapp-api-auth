@@ -20,7 +20,7 @@ stages:
     packageName: 'Demo.WebUI.zip'
 - template: azure-release-pipelines-stage-template.yml
   parameters:
-    stageName: 'CI'
+    stageName: 'CI2'
     environment: 'CI'
     azureSubscription: ${{ variables.azureSubscription }}
     webAppName: 'rutzscodev-demo-webapp-api-auth-ui2-ci'
