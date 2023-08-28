@@ -5,6 +5,7 @@ using Demo.WebUI.Models;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 using System;
@@ -23,23 +24,28 @@ namespace Demo.WebUI.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpClientFactory _clientFactory;
+        private readonly IConfiguration _config;
 
-        public HomeController(IHttpClientFactory clientFactory, ILogger<HomeController> logger)
+        public HomeController(IHttpClientFactory clientFactory, IConfiguration config, ILogger<HomeController> logger)
         {
             _logger = logger;
             _clientFactory = clientFactory;
+            _config = config;
         }
 
         public async Task<ActionResult> Index()
         {
+            var webAPIScope = _config["WebAPIScope"];
+            var webAPIUrl = _config["WebAPIUrl"];
+
             var tokenCredential = new DefaultAzureCredential();
-            var accessToken = tokenCredential.GetToken(new TokenRequestContext(scopes: new string[] { "api://f85c6bd9-11e3-45b2-8e49-f719766bb99e" + "/.default" }) { });
+            var accessToken = tokenCredential.GetToken(new TokenRequestContext(scopes: new string[] { webAPIScope }) { });
             List<WeatherForecast> weatherForecast = null;
 
             var client = _clientFactory.CreateClient();
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Token);
-            HttpResponseMessage response = await client.GetAsync("https://rutzsco-demo-webapp-api-auth-api-ci2.azure-api.net/WeatherForecast");
+            HttpResponseMessage response = await client.GetAsync(webAPIUrl);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
