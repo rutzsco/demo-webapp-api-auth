@@ -21,3 +21,5 @@ Using the information from the client token add JWT validation rule to API Manag
 ```
 
 ## References
+
+- [how-to-assign-app-role-managed-identity] (https://learn.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/how-to-assign-app-role-managed-identity-cli)
