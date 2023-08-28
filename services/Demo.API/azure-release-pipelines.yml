@@ -6,7 +6,7 @@ resources:
     source: 'demo-webapp-api-auth - API - BUILD'
   
 variables:
-  azureSubscription: 'Demo Account Rutzscodev'
+  azureSubscription: 'Demo Account'
 
 stages:
 - template: azure-release-pipelines-stage-template.yml
