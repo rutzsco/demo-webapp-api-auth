@@ -32,7 +32,7 @@ stages:
       displayName: Deploy
       environment: ${{ parameters.environment }}
       pool:
-        vmImage: 'vs2017-win2016'
+        vmImage: 'windows-latest'
   
       strategy:
         runOnce:
