@@ -40,6 +40,8 @@ namespace Demo.WebUI.Controllers
 
             var tokenCredential = new DefaultAzureCredential();
             var accessToken = tokenCredential.GetToken(new TokenRequestContext(scopes: new string[] { webAPIScope }) { });
+
+            _logger.LogInformation($"AccessToken: {accessToken}");
             List<WeatherForecast> weatherForecast = null;
 
             var client = _clientFactory.CreateClient();
