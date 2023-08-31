@@ -50,7 +50,7 @@ namespace Demo.API
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("https://rutzsco-demo-webapp-api-auth-api-ci2.azure-api.net/swagger/v1/swagger.json", "My API V1");  // Adjust the URL accordingly
+                c.SwaggerEndpoint("./swagger/v1/swagger.json", "My API V1");  // Adjust the URL accordingly
             });
         }
     }
