@@ -35,26 +35,7 @@ namespace Demo.WebUI.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var webAPIScope = _config["WebAPIScope"];
-            var webAPIUrl = _config["WebAPIUrl"];
-
-            var tokenCredential = new DefaultAzureCredential();
-            var accessToken = tokenCredential.GetToken(new TokenRequestContext(scopes: new string[] { webAPIScope }) { });
-
-            _logger.LogInformation($"AccessToken: {accessToken}");
-            List<WeatherForecast> weatherForecast = null;
-
-            var client = _clientFactory.CreateClient();
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Token);
-            HttpResponseMessage response = await client.GetAsync(webAPIUrl);
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                weatherForecast = JsonSerializer.Deserialize<List<WeatherForecast>>(content);
-            }
-
-            return View(new HomeViewModel(this.HttpContext.User.Claims, accessToken.Token, weatherForecast));
+            return View(new HomeViewModel(this.HttpContext.User.Claims));
         }
 
         [AllowAnonymous]

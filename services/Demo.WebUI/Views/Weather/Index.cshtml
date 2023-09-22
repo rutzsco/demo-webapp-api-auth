@@ -1,0 +1,53 @@
+﻿@model WeatherViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Weather Forecast</h1>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Summary</th>
+                 <th scope="col">Temperature</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.WeatherForecast)
+            {
+                <tr scope="row">
+                    <td>@item.date</td>
+                    <td>@item.summary</td>
+                    <td>@item.temperatureF</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<p>MI Access Token:</p>
+<p>@Model.AccessToken</p>
+
+<div class="text-center">
+    <h1 class="display-4">User Details</h1>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Type</th>
+                <th scope="col">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Claims)
+            {
+                <tr scope="row">
+                    <td>@item.Type</td>
+                    <td>@item.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
