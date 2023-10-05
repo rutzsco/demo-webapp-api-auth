@@ -33,15 +33,18 @@ namespace Demo.WebUI.Controllers
             var webAPIScope = _config["WebAPIScope"];
             var webAPIUrl = _config["WebAPIUrl"];
 
+#if !DEBUG
             var tokenCredential = new DefaultAzureCredential();
             var accessToken = tokenCredential.GetToken(new TokenRequestContext(scopes: new string[] { webAPIScope }) { });
-
             _logger.LogInformation($"AccessToken: {accessToken}");
-            List<WeatherForecast> weatherForecast = null;
+#endif
 
+            List<WeatherForecast> weatherForecast = null;
             var client = _clientFactory.CreateClient();
 
+#if !DEBUG
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Token);
+#endif
             HttpResponseMessage response = await client.GetAsync(webAPIUrl);
             if (response.IsSuccessStatusCode)
             {
@@ -49,7 +52,11 @@ namespace Demo.WebUI.Controllers
                 weatherForecast = JsonSerializer.Deserialize<List<WeatherForecast>>(content);
             }
 
+#if !DEBUG
             return View(new WeatherViewModel(this.HttpContext.User.Claims, accessToken.Token, weatherForecast));
+#else
+            return View(new WeatherViewModel(this.HttpContext.User.Claims, string.Empty, weatherForecast));
+#endif
         }
 
     }
