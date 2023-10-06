@@ -1,0 +1,59 @@
+# ----------------------------------------------------------------------------------------------------
+# Template to build the WebApp and create artifacts
+# ----------------------------------------------------------------------------------------------------
+parameters: 
+- name: buildDeployApps
+  default: true
+- name: stageName
+  default: 'CI'
+- name: environment
+  default: 'CI'
+- name: buildConfiguration
+  default: 'Release'
+- name: rootDirectory
+  default: ''
+- name: artifactName
+  default: 'WebApp'
+
+# ----------------------------------------------------------------------------------------------------
+jobs:
+- deployment: BuildWebApp
+  displayName: Build WebApp
+  environment: ${{ parameters.environment }}
+- job: BuildWebAppJob
+  displayName: Build WebApp Job
+  steps:
+  - task: CmdLine@2
+    inputs:
+      script: |
+        echo "stageName=${{ parameters.stageName }}"
+        echo "environment=${{ parameters.environment }}"
+        echo "buildConfiguration=${{ parameters.buildConfiguration }}"
+        echo "rootDirectory=${{ parameters.rootDirectory }}"
+        echo "artifactName=${{ parameters.artifactName }}"
+        echo "Directory of rootDirectory:"
+        dir "${{ parameters.rootDirectory }}" /s
+    displayName: 'Display Variables and Tree'
+    continueOnError: true
+
+  - ${{ if eq(lower(parameters.buildDeployApps), 'true') }}:
+    - task: DotNetCoreCLI@2
+      displayName: 'Build WebApp project'
+      inputs:
+        projects: ' ${{ parameters.rootDirectory }}/*.csproj'
+        arguments: '--output publish_output --configuration Release'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish WebApp project'
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: '${{ parameters.rootDirectory }}/*.csproj'
+        arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+        
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish WebApp Artifacts'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: ${{ parameters.artifactName }}
+        publishLocation: 'pipeline'
