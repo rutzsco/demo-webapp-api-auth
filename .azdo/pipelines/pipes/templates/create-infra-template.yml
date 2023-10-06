@@ -1,0 +1,98 @@
+# ----------------------------------------------------------------------------------------------------
+# Template to deploy Azure Resources for one environment
+# ----------------------------------------------------------------------------------------------------
+parameters: 
+- name: createInfra
+  default: true
+- name: stageName
+  default: 'CI'
+- name: environment
+  default: 'CI'
+- name: azureSubscription
+  default: ''
+- name: webAppName
+  default: ''
+- name: apiAppName
+  default: ''
+- name: apiAppAPIMName
+  default: ''
+- name: organizationName
+  default: ''
+- name: adminEmail
+  default: ''
+- name: resourceGroupName
+  default: ''
+- name: region
+  default: ''
+- name: templateFolderName
+  default: 'infra\arm'
+
+# ----------------------------------------------------------------------------------------------------
+jobs:
+- deployment: CreateInfra
+  displayName: Create Infra
+  environment: ${{ parameters.environment }}
+- job: CreateInfraJob
+  displayName: Create Infra Job
+  variables:
+    - name: templateDirectory
+      value: '$(Pipeline.Workspace)\s\${{ parameters.templateFolderName }}'
+  steps:
+  - task: CmdLine@2
+    inputs:
+      script: |
+        echo "createInfra=${{ parameters.createInfra }}"
+        echo "stageName=${{ parameters.stageName }}"
+        echo "environment=${{ parameters.environment }}"
+        echo "azureSubscription=${{ parameters.azureSubscription }}"
+        echo "webAppName=${{ parameters.webAppName }}"
+        echo "apiAppAPIMName=${{ parameters.apiAppAPIMName }}"
+        echo "organizationName=${{ parameters.organizationName }}"
+        echo "adminEmail=${{ parameters.adminEmail }}"
+        echo "resourceGroupName=${{ parameters.resourceGroupName }}"
+        echo "region=${{ parameters.region }}"
+        echo "Directory of $(templateDirectory):"
+        dir  $(templateDirectory) /s
+    displayName: 'Display Variables and Tree'
+    continueOnError: true
+
+  - ${{ if eq(lower(parameters.createInfra), 'true') }}:
+    - task: AzureResourceGroupDeployment@2
+      displayName: '1. Create APIM Consumption'
+      inputs:
+        azureSubscription: ${{ parameters.azureSubscription }}
+        resourceGroupName: ${{ parameters.resourceGroupName }}
+        location: ${{ parameters.region }}
+        csmFile: '$(templateDirectory)\api-management-consumption.json'
+        overrideParameters: '-apimName ${{ parameters.apiAppAPIMName }}2 -organizationName ${{ parameters.organizationName }} -adminEmail ${{ parameters.adminEmail }}'
+        deploymentOutputs: ResourceGroupDeploymentOutputs
+
+    - task: AzureResourceGroupDeployment@2
+      displayName: '2. Create APIM Dev'
+      inputs:
+        azureSubscription: ${{ parameters.azureSubscription }}
+        resourceGroupName: ${{ parameters.resourceGroupName }}
+        location: ${{ parameters.region }}
+        csmFile: '$(templateDirectory)\api-management-core.json'
+        overrideParameters: '-serviceName ${{ parameters.apiAppAPIMName }}3 -publisherName ${{ parameters.organizationName }} -publisherEmail ${{ parameters.adminEmail }}'
+        deploymentOutputs: ResourceGroupDeploymentOutputs
+
+    - task: AzureResourceGroupDeployment@2
+      displayName: '3. Create WebAPI Service'
+      inputs:
+        azureSubscription: ${{ parameters.azureSubscription }}
+        resourceGroupName: ${{ parameters.resourceGroupName }}
+        location: ${{ parameters.region }}
+        csmFile: '$(templateDirectory)\appservice-web-api.json'
+        overrideParameters: '-appName ${{ parameters.apiAppName }}'
+        deploymentOutputs: ResourceGroupDeploymentOutputs
+
+    - task: AzureResourceGroupDeployment@2
+      displayName: '4. Create WebApp Service'
+      inputs:
+        azureSubscription: ${{ parameters.azureSubscription }}
+        resourceGroupName: ${{ parameters.resourceGroupName }}
+        location: ${{ parameters.region }}
+        csmFile: '$(templateDirectory)\appservice-web-app.json'
+        overrideParameters: '-appName ${{ parameters.webAppName }}'
+        deploymentOutputs: ResourceGroupDeploymentOutputs

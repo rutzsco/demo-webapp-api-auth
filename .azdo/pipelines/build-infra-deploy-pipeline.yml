@@ -1,0 +1,99 @@
+# ------------------------------------------------------------------------------------------------------------------------
+# Pipeline to build and deploy the entire application
+# ------------------------------------------------------------------------------------------------------------------------
+name: $(date:yyyy).$(date:MM).$(date:dd)$(rev:.r)
+
+pool:
+  vmImage: windows-latest
+
+# ------------------------------------------------------------------------------------------------------------------------
+trigger: none
+ 
+parameters:
+  - name: createInfra
+    displayName: Create Infra
+    type: boolean
+    default: true
+  - name: buildDeployApps
+    displayName: Build and Deploy Apps
+    type: boolean
+    default: true
+  - name: runDevSecOpsScan
+    displayName: Run MS DevSecOps Scan
+    type: boolean
+    default: false
+  - name: runGHAzDOScan
+    displayName: Run GHAS Scan
+    type: boolean
+    default: false
+  - name: runPlaywright
+    displayName: Run Playwright Tests
+    type: boolean
+    default: false
+
+# ------------------------------------------------------------------------------------------------------------------------
+variables:
+  # Lyle's variables
+  # TODO: put the variables into a variable group so they can be updated easily
+  azureSubscription: 'Lyle Luppes Sandbox'
+  webAppName: 'lll-playwright-web'
+  apiAppName: 'lll-playwright-api'
+  apiAppAPIMName: 'lll-playwright-apim'
+  organizationName: 'lyleluppes'
+  adminEmail: 'lyleluppes@microsoft.com'
+  resourceGroupName: 'rg_playwright_testing'
+  region: 'East US'
+
+  # Scott's variables
+  # azureSubscription: 'Demo Account'
+  # apiAppName: 'rutzscodev-demo-webapp-api-auth-api-ci'
+  # apiAppAPIMName: 'rutzsco-demo-webapp-api-auth-api-ci'
+  # organizationName: 'scrutz'
+  # adminEmail: 'scrutz@microsoft.com'
+  # resourceGroupName: 'rutzscodev-demo-webapp-api-auth-api-ci'
+  # region: 'East US'
+
+  # Project Static variables
+  webSourcePath: 'services/Demo.WebUI'
+  apiSourcePath: 'services/Demo.API'
+  webPackageName: 'Demo.WebUI.zip'
+  apiPackageName: 'Demo.API.zip'
+  webArtifactName: 'WebApp'
+  apiArtifactName: 'WebApi'
+  workingDirectoryCode: 'services/'
+  workingDirectoryInfra: 'infra/'
+  
+stages:
+# ------------------------------------------------------------------------------------------------------------------------
+- template: pipes/build-infra-deploy-pipe.yml
+  parameters:
+    createInfra: ${{ parameters.createInfra }}
+    buildDeployApps: ${{ parameters.buildDeployApps }}
+    runDevSecOpsScan: ${{ parameters.runDevSecOpsScan }}
+    runGHAzDOScan: ${{ parameters.runGHAzDOScan }}
+
+    organizationName:  ${{ variables.organizationName }}
+    adminEmail:  ${{ variables.adminEmail }}
+    resourceGroupName:  ${{ variables.resourceGroupName }}
+    region: ${{ variables.region }}
+    azureSubscription: ${{ variables.azureSubscription }}
+
+    apiAppAPIMName:  ${{ variables.apiAppAPIMName }}
+
+    webRootDirectory: ${{ variables.apiSourcePath }}
+    apiRootDirectory: ${{ variables.apiSourcePath }}
+
+    webAppName:  ${{ variables.webAppName }}
+    apiAppName:  ${{ variables.apiAppName }}
+
+    webPackageName: ${{ variables.webPackageName }}
+    apiPackageName: ${{ variables.apiPackageName }}
+
+    webSourcePath: ${{ variables.webSourcePath }}
+    apiSourcePath: ${{ variables.apiSourcePath }}
+
+    webArtifactName:  ${{ variables.webArtifactName }}
+    apiArtifactName:  ${{ variables.apiArtifactName }}
+
+    workingDirectoryCode: ${{ variables.workingDirectoryCode }}
+    workingDirectoryInfra: ${{ variables.workingDirectoryInfra }}
