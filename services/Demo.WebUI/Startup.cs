@@ -33,10 +33,10 @@ namespace Demo.WebUI
 
             services.AddControllersWithViews(options =>
             {
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
+                //var policy = new AuthorizationPolicyBuilder()
+                //    .RequireAuthenticatedUser()
+                //    .Build();
+                //options.Filters.Add(new AuthorizeFilter(policy));
             });
             services.AddHttpClient();
             services.AddRazorPages();
