@@ -35,7 +35,11 @@ namespace Demo.WebUI.Controllers
 
         public async Task<ActionResult> Index()
         {
-            return View(new HomeViewModel(this.HttpContext.User.Claims));
+            if(this.HttpContext.User != null)
+            {
+                return View(new HomeViewModel(this.HttpContext.User.Claims));
+            }
+            return View(new HomeViewModel());
         }
 
         [AllowAnonymous]

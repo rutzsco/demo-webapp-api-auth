@@ -6,6 +6,10 @@ namespace Demo.WebUI.Models
 {
     public class HomeViewModel
     {
+        public HomeViewModel()
+        {
+            Claims = new List<Claim>();
+        }
         public HomeViewModel(IEnumerable<Claim> claims)
         {
             Claims = claims ?? throw new ArgumentNullException(nameof(claims));
