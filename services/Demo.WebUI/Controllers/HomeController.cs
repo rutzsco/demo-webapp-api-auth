@@ -35,11 +35,12 @@ namespace Demo.WebUI.Controllers
 
         public async Task<ActionResult> Index()
         {
-            if(this.HttpContext.User != null)
+            var headers = this.HttpContext.Request.Headers.Select(x => new KeyValuePair<string, string>(x.Key, x.Value)).ToList();
+            if (this.HttpContext.User != null)
             {
-                return View(new HomeViewModel(this.HttpContext.User.Claims));
+                return View(new HomeViewModel(this.HttpContext.User.Claims, headers));
             }
-            return View(new HomeViewModel());
+            return View(new HomeViewModel(headers));
         }
 
         [AllowAnonymous]

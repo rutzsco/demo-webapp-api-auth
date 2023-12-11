@@ -22,6 +22,13 @@
                     <td align="left">@item.Value</td>
                 </tr>
             }
+            @foreach (var h in Model.Headers)
+            {
+                <tr scope="row">
+                    <td align="left">@h.Key</td>
+                    <td align="left">@h.Value</td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
